@@ -16,7 +16,7 @@ public/client/svg
 public/storage
 public/hot
 public/img
-
+public/assets/fonts
 # Laravel 5 & Lumen specific with changed public path
 public_html/storage
 public_html/hot
