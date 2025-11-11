@@ -1,6 +1,6 @@
 <!-- Menu Navigation starts -->
-<nav style="height: 100vh; display: flex; flex-direction: column;">
-    
+<nav id="sidebar-nav" style="height: 100vh; display: flex; flex-direction: column;">
+
     <div class="app-logo">
         <div class="row col-lg-12">
             <!-- Logo div -->
@@ -10,9 +10,9 @@
                    data-bs-target="#profilecanvasRight" aria-controls="profilecanvasRight">
                     <img src="{{ Auth::user()->path_photo ?? asset('../assets/images/ai_avtar/2.jpg')}} " alt="avtar" class="h-40 w-40" style="border-radius:50%;">
                 </a>
-            
+
                 <!-- User Info -->
-                <div id="info">
+                <div id="info" class="sidebar-user-info">
                     <span class="text-bold" style="color:#fff;font-size:12px;">
                         <strong>{{ Auth::user()->firstname.' '.Auth::user()->name }}</strong>
                     </span>
@@ -20,15 +20,15 @@
                     <span class="text-sm" style="color:#fff;font-size:smaller;">{{ Auth::user()->niveau }}</span>
                 </div>
             </div>
-    
+
             <!-- Info div -->
-          
+
         </div>
-    
+
         <!-- Toggle button -->
-        <span class="bg-light-primary toggle-semi-nav">
-            <i class="ti ti-chevrons-right f-s-20"></i>
-        </span>
+        <button id="sidebar-toggle-btn" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+            <i class="ti ti-chevrons-left"></i>
+        </button>
     </div>
     
     <div class="app-nav" id="app-simple-bar" style="flex: 1; overflow-y: auto;">
@@ -158,6 +158,44 @@
     });
 
     document.addEventListener("DOMContentLoaded", function () {
+        // Sidebar Toggle Functionality
+        const sidebar = document.getElementById('sidebar-nav');
+        const toggleBtn = document.getElementById('sidebar-toggle-btn');
+        const appWrapper = document.querySelector('.app-wrapper');
+        const toggleIcon = toggleBtn.querySelector('i');
+
+        // Check if there's a saved state in localStorage
+        const sidebarState = localStorage.getItem('sidebarCollapsed');
+        if (sidebarState === 'true') {
+            sidebar.classList.add('semi-nav');
+        }
+
+        // Toggle sidebar on button click
+        toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            sidebar.classList.toggle('semi-nav');
+
+            // Update icon based on state
+            if (sidebar.classList.contains('semi-nav')) {
+                toggleIcon.className = 'ti ti-chevrons-right';
+                localStorage.setItem('sidebarCollapsed', 'true');
+            } else {
+                toggleIcon.className = 'ti ti-chevrons-left';
+                localStorage.setItem('sidebarCollapsed', 'false');
+            }
+        });
+
+        // Prevent sidebar expansion on icon hover/click
+        const navLinks = sidebar.querySelectorAll('.main-nav a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Allow normal link behavior, but don't expand sidebar
+                e.stopPropagation();
+            });
+        });
+
         function fetchChatCounts() {
             fetch('/admin/get-chat-count', {
                 method: 'GET',
@@ -187,7 +225,7 @@
 
         searchForm.addEventListener('submit', function(event) {
             // Empêche le formulaire de se soumettre de manière classique
-            event.preventDefault(); 
+            event.preventDefault();
 
             const searchValue = searchInput.value.trim();
 
@@ -195,7 +233,7 @@
                 // Construit l'URL de la page des clients avec le paramètre de recherche
                 // Assurez-vous que la route 'admin.clients' est correcte
                 const url = `{{ route('admin.clients') }}?search=${encodeURIComponent(searchValue)}`;
-                
+
                 // Redirige l'utilisateur vers la nouvelle URL
                 window.location.href = url;
             }

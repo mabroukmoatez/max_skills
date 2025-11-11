@@ -1,27 +1,43 @@
 // >>-- 04 Nav css start --<<
 
-.toggle-semi-nav {
-    float: right;
-    padding: 5px;
-    line-height: 1.1;
-    border-radius: 15px;
+// Sidebar Toggle Button Styles
+.sidebar-toggle-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 1rem;
+    padding: 8px 10px;
+    border: none;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
     cursor: pointer;
-    display: none;
-}
+    transition: var(--app-transition);
+    z-index: 1004;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-.semi-nav {
-    &:hover {
-        .toggle-semi-nav {
-            display: block;
-        }
+    i {
+        font-size: 1.2rem;
+        transition: var(--app-transition);
     }
 
-    .app-logo {
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+    }
+}
+
+// Semi-nav (collapsed sidebar) specific button styles
+.semi-nav {
+    .sidebar-toggle-btn {
+        position: fixed;
+        top: 1.5rem;
+        left: 1rem;
+        background-color: rgba(var(--dark), 1);
+        color: white;
+
         &:hover {
-            .toggle-semi-nav {
-                background-color: rgba(var(--primary), 0.2) !important;
-                transition: var(--app-transition);
-            }
+            background-color: rgba(var(--dark), 0.8);
         }
     }
 }
@@ -238,64 +254,10 @@ nav {
         .badge {
             display: none;
         }
-        &:hover {
-            width: $sidebar-width;
-            transition: var(--app-transition);
 
-            .app-logo {
-                padding: 1.5rem 1.5rem 0 1.5rem;
-                .logo {
-                    width: auto;
-                    overflow: unset;
-                    transition: var(--app-transition);
-                }
-            }
-            .app-nav {
-                width: 100%;
-                .menu-title {
-                    span {
-                        display: inline;
-                        text-overflow: unset;
-                        overflow: unset;
-                        white-space: unset;
-                        color: rgba(var(--secondary), 1);
-                        font-size: inherit;
-                        transition: var(--app-transition);
-                    }
-                }
-
-                .main-nav {
-                    > li {
-                        &:not(.menu-title) {
-                            ul {
-                                height: auto;
-                                opacity: 1;
-                                transition: var(--app-transition);
-                            }
-                            > a::after {
-                                content: "\ec86";
-                                transition: var(--app-transition);
-                            }
-                            a[aria-expanded="true"]::after, >a [aria-expanded="true"]::after {
-                                content: "\ebf8";
-                                transition: var(--app-transition);
-                            }
-                        }
-                        a {
-                            font-size: inherit;
-                            text-align: left;
-                            transition: var(--app-transition);
-                            transition-duration: 0.15s;
-                            i {
-                                font-size: 1.2rem;
-                                margin-right: 0.25rem;
-                                margin-top: -4px;
-                                margin-left: 0;
-                            }
-                        }
-                    }
-                }
-            }
+        // Remove hover expansion - sidebar only expands via button click
+        .sidebar-user-info {
+            display: none;
         }
 
         & ~ .app-content {
@@ -353,13 +315,25 @@ nav {
                     a {
                         font-size: 0;
                         text-align: center;
-                        i {
-                            font-size: 1.2rem;
+                        padding: 0.6rem 0.5rem;
+                        justify-content: center;
+
+                        i, img {
+                            font-size: 1.3rem;
                             margin: 0 auto;
+                        }
+
+                        p {
+                            display: none;
                         }
                     }
                 }
             }
+        }
+
+        // Hide text elements in collapsed sidebar
+        .menu-title-small {
+            display: none;
         }
         //}
     }
@@ -515,6 +489,63 @@ nav {
         .main {
             max-width: 1366px;
         }
+    }
+}
+
+// Responsive styles for mobile devices
+@media (max-width: 768px) {
+    nav {
+        width: $sidebar-width;
+
+        &.semi-nav {
+            width: 0;
+            overflow: hidden;
+        }
+    }
+
+    .app-wrapper {
+        .semi-nav {
+            ~ .app-content {
+                padding-left: 0;
+
+                header {
+                    &.header-main {
+                        padding-left: 20px;
+                    }
+                }
+
+                footer {
+                    padding-left: 0;
+                }
+            }
+        }
+    }
+
+    .sidebar-toggle-btn {
+        position: fixed !important;
+        top: 1rem;
+        left: 1rem;
+        z-index: 1005;
+        background-color: rgba(var(--dark), 1) !important;
+    }
+
+    nav:not(.semi-nav) {
+        .sidebar-toggle-btn {
+            right: 1rem;
+            left: auto;
+            background-color: rgba(255, 255, 255, 0.2) !important;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    nav {
+        width: 85vw;
+        max-width: 280px;
+    }
+
+    .app-wrapper .semi-nav ~ .app-content {
+        padding-left: 0;
     }
 }
 
