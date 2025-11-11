@@ -1,6 +1,6 @@
 // >>-- 04 Nav css start --<<
 
-// Sidebar Toggle Button Styles
+// Sidebar Toggle Button Styles - Floating hamburger icon
 .sidebar-toggle-btn {
     position: absolute;
     top: 1.5rem;
@@ -8,7 +8,7 @@
     padding: 8px 10px;
     border: none;
     border-radius: 8px;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.15);
     color: white;
     cursor: pointer;
     transition: var(--app-transition);
@@ -18,27 +18,13 @@
     justify-content: center;
 
     i {
-        font-size: 1.2rem;
+        font-size: 1.4rem;
         transition: var(--app-transition);
+        color: white;
     }
 
     &:hover {
-        background-color: rgba(255, 255, 255, 0.3);
-    }
-}
-
-// Semi-nav (collapsed sidebar) specific button styles
-.semi-nav {
-    .sidebar-toggle-btn {
-        position: fixed;
-        top: 1.5rem;
-        left: 1rem;
-        background-color: rgba(var(--dark), 1);
-        color: white;
-
-        &:hover {
-            background-color: rgba(var(--dark), 0.8);
-        }
+        background-color: rgba(255, 255, 255, 0.25);
     }
 }
 
@@ -255,9 +241,80 @@ nav {
             display: none;
         }
 
-        // Remove hover expansion - sidebar only expands via button click
+        // Hide user info in collapsed state
         .sidebar-user-info {
             display: none;
+        }
+
+        // Hover expansion - temporarily expand sidebar on hover
+        &.hover-expanded {
+            width: $sidebar-width;
+            transition: var(--app-transition);
+
+            .sidebar-user-info {
+                display: block;
+            }
+
+            .badge {
+                display: inline-block;
+            }
+
+            .app-nav {
+                width: 100%;
+                .menu-title {
+                    span {
+                        display: inline;
+                        text-overflow: unset;
+                        overflow: unset;
+                        white-space: unset;
+                        color: rgba(var(--secondary), 1);
+                        font-size: inherit;
+                        transition: var(--app-transition);
+                    }
+                }
+
+                .main-nav {
+                    > li {
+                        &:not(.menu-title) {
+                            ul {
+                                height: auto;
+                                opacity: 1;
+                                transition: var(--app-transition);
+                            }
+                            > a::after {
+                                content: "\ec86";
+                                transition: var(--app-transition);
+                            }
+                            a[aria-expanded="true"]::after, >a [aria-expanded="true"]::after {
+                                content: "\ebf8";
+                                transition: var(--app-transition);
+                            }
+                        }
+                        a {
+                            font-size: inherit;
+                            text-align: left;
+                            transition: var(--app-transition);
+                            transition-duration: 0.15s;
+                            padding: 0.6rem 1rem;
+
+                            i, img {
+                                font-size: 1.3rem;
+                                margin-right: 0.3rem;
+                                margin-top: 0;
+                                margin-left: 0;
+                            }
+
+                            p {
+                                display: block;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .menu-title-small {
+                display: block;
+            }
         }
 
         & ~ .app-content {
@@ -500,6 +557,10 @@ nav {
         &.semi-nav {
             width: 0;
             overflow: hidden;
+
+            &.hover-expanded {
+                width: $sidebar-width;
+            }
         }
     }
 
@@ -518,6 +579,10 @@ nav {
                     padding-left: 0;
                 }
             }
+
+            &.hover-expanded ~ .app-content {
+                padding-left: 0;
+            }
         }
     }
 
@@ -527,13 +592,18 @@ nav {
         left: 1rem;
         z-index: 1005;
         background-color: rgba(var(--dark), 1) !important;
+
+        i {
+            color: white !important;
+        }
     }
 
     nav:not(.semi-nav) {
         .sidebar-toggle-btn {
+            position: absolute !important;
             right: 1rem;
             left: auto;
-            background-color: rgba(255, 255, 255, 0.2) !important;
+            background-color: rgba(255, 255, 255, 0.15) !important;
         }
     }
 }

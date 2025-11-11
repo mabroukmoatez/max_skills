@@ -25,9 +25,9 @@
 
         </div>
 
-        <!-- Toggle button -->
+        <!-- Toggle button - 3 line hamburger icon -->
         <button id="sidebar-toggle-btn" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">
-            <i class="ti ti-chevrons-left"></i>
+            <i class="ti ti-menu-2"></i>
         </button>
     </div>
     
@@ -162,7 +162,7 @@
         const sidebar = document.getElementById('sidebar-nav');
         const toggleBtn = document.getElementById('sidebar-toggle-btn');
         const appWrapper = document.querySelector('.app-wrapper');
-        const toggleIcon = toggleBtn.querySelector('i');
+        let isHovering = false;
 
         // Check if there's a saved state in localStorage
         const sidebarState = localStorage.getItem('sidebarCollapsed');
@@ -170,30 +170,32 @@
             sidebar.classList.add('semi-nav');
         }
 
-        // Toggle sidebar on button click
+        // Toggle sidebar on button click (permanent toggle)
         toggleBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
 
             sidebar.classList.toggle('semi-nav');
 
-            // Update icon based on state
+            // Save state
             if (sidebar.classList.contains('semi-nav')) {
-                toggleIcon.className = 'ti ti-chevrons-right';
                 localStorage.setItem('sidebarCollapsed', 'true');
             } else {
-                toggleIcon.className = 'ti ti-chevrons-left';
                 localStorage.setItem('sidebarCollapsed', 'false');
             }
         });
 
-        // Prevent sidebar expansion on icon hover/click
-        const navLinks = sidebar.querySelectorAll('.main-nav a');
-        navLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                // Allow normal link behavior, but don't expand sidebar
-                e.stopPropagation();
-            });
+        // Hover functionality for collapsed sidebar
+        sidebar.addEventListener('mouseenter', function() {
+            if (sidebar.classList.contains('semi-nav')) {
+                isHovering = true;
+                sidebar.classList.add('hover-expanded');
+            }
+        });
+
+        sidebar.addEventListener('mouseleave', function() {
+            isHovering = false;
+            sidebar.classList.remove('hover-expanded');
         });
 
         function fetchChatCounts() {
