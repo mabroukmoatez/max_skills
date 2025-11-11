@@ -1,0 +1,30 @@
+.form-section {
+    display: flex;
+    gap: 20px;
+}
+
+.form-section .left-section {
+    flex: 9; /* col-lg-9 */
+}
+
+.form-section .right-section {
+    flex: 3; /* col-lg-3 */
+    border-left: 1px solid #efefef; /* Add a left border */
+    border-radius: 20px; /* Add border radius */
+    padding-left: 10px; /* Add some padding to separate content from the border */
+}
+
+.full-width-form {
+    width: 100%;
+}
+.accordion-button {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+}
+.add-chapter-btn {
+    margin-top: 20px;
+}
+#handleList .row.accordion.app-accordion {
+    margin-bottom: 10px;
+}
